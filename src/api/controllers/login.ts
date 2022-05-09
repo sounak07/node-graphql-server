@@ -3,6 +3,7 @@ import { Request, RequestHandler, Response } from 'express';
 import { map } from 'lodash';
 import bcryptjs from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import rateLimitter from '../middlewares/rateLimitMW';
 import asyncWrap from '../../utils/asyncwrap';
 import User from '../../database/models/user';
 import { UnAuthorized, ValidationError } from '../../exceptions/error';
@@ -52,6 +53,7 @@ const loginController: RequestHandler = async (req: Request, res: Response) => {
 };
 
 const middlewares = [
+  rateLimitter,
   loginController,
 ];
 
