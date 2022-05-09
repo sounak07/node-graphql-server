@@ -2,6 +2,7 @@
 import { Request, RequestHandler, Response } from 'express';
 import { map } from 'lodash';
 import asyncWrap from '../../utils/asyncwrap';
+import verifyTokenMW from '../middlewares/verifyTokenMW';
 
 const countryController: RequestHandler = async (req: Request, res: Response) => {
   res.status(201).json({
@@ -10,6 +11,7 @@ const countryController: RequestHandler = async (req: Request, res: Response) =>
 };
 
 const middlewares = [
+  verifyTokenMW,
   countryController,
 ];
 

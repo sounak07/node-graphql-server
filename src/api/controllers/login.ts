@@ -14,6 +14,9 @@ const loginController: RequestHandler = async (req: Request, res: Response) => {
     throw new ValidationError('email and password required');
   }
 
+  // TODO : use regex to verify email
+  // TODO: fetch secret string from env
+
   const user = await User.findOne({ email });
 
   if (user) {
@@ -23,7 +26,7 @@ const loginController: RequestHandler = async (req: Request, res: Response) => {
         email: user.email,
       };
 
-      const token = await jwt.sign(payLoad, 'some-secret', { expiresIn: '5s' });
+      const token = await jwt.sign(payLoad, 'some-secret', { expiresIn: 3600 });
       res.json({
         success: true,
         token: `Bearer ${token}`,
