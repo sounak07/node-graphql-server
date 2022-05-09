@@ -1,0 +1,62 @@
+{
+  "name": "anyfin",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint . --ext .ts",
+    "lint-and-fix": "eslint . --ext .ts --fix",
+    "test": "jest",
+    "build": "rimraf ./build && tsc",
+    "dev": "nodemon",
+    "start-local": "npm run build && node build/src/index.js",
+    "start": "npm run build && node build/src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/async": "^3.2.5",
+    "@types/bcryptjs": "^2.4.2",
+    "@types/cors": "^2.8.10",
+    "@types/express": "^4.17.11",
+    "@types/jest": "^26.0.20",
+    "@types/json2csv": "^5.0.3",
+    "@types/jsonwebtoken": "^8.5.1",
+    "@types/lodash": "^4.14.178",
+    "@types/node": "^17.0.8",
+    "@types/node-fetch": "^2.5.10",
+    "@types/validator": "^13.7.1",
+    "@typescript-eslint/eslint-plugin": "^4.15.0",
+    "@typescript-eslint/parser": "^4.15.0",
+    "eslint": "^7.20.0",
+    "eslint-config-airbnb-typescript": "^12.3.1",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.22.0",
+    "jest": "^26.6.3",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^26.5.1",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.1.5"
+  },
+  "dependencies": {
+    "@sentry/node": "^6.1.0",
+    "async": "^3.2.0",
+    "axios": "^0.20.0",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "json2csv": "^5.0.6",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.21",
+    "mongoose": "^6.3.2",
+    "node-fetch": "^2.6.1",
+    "superagent": "^6.1.0"
+  }
+}

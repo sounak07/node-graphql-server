@@ -1,0 +1,22 @@
+version: "2.3"
+
+services:
+  api:
+    command: ["npm", "start"]
+    environment:
+      DB_HOST: host.docker.internal
+      DB_DATABASE: sounak_db
+      DB_USER: postgres
+      DB_PASSWORD: postgres123
+      DB_CHARSET: utf8mb4
+      DB_SCHEMA: sounak_new
+      PORT: 8090
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - "8090:5070"
+    restart: always
+    volumes:
+      - ./src:/src
+      - ./build:/build
