@@ -3,7 +3,6 @@ import express, {
 } from 'express';
 import * as bodyParser from 'body-parser';
 import { ApolloServer } from 'apollo-server-express';
-import api from './api/routes/v1/index';
 import corsMiddleware from './api/middlewares/corsMW';
 import errorHandler from './api/middlewares/errorMW';
 import connectDB from './database/connect';
@@ -22,7 +21,6 @@ server.get('/health', async (req: Request, res: Response) => {
 
 connectDB();
 
-server.use('/v1', api);
 server.use(errorHandler);
 
 const port = 5070 || process.env.PORT;

@@ -22,6 +22,19 @@ const typeDefs = gql`
         hello: String
         getCurrencyValues(sekValue: Int!, Countries: [countryList]!): [Currency]
     }
+
+    type User {
+        data: String
+    }
+
+    input UserInput {
+        email: String
+        password: String
+    }
+
+    type Mutation {
+        createUser(user: UserInput!): User
+    }
 `;
 
 export default typeDefs;
