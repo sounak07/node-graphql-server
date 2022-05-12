@@ -28,14 +28,12 @@ const port = 5070 || process.env.PORT;
 async function strtGraphQL() {
   const apolloServer = new ApolloServer({ typeDefs, resolvers });
   await apolloServer.start();
+
   apolloServer.applyMiddleware({ app: server });
+
+  server.listen(port, () => {
+    console.log(`App runing at ${port}`);
+  });
 }
 
 strtGraphQL();
-
-// eslint-disable-next-line no-console
-const app = server.listen(port, () => {
-  console.log(`App runing at ${port}`);
-});
-
-export default app;
