@@ -9,7 +9,7 @@ services:
     ports:
       - "${PORT-27017:27017}"
     volumes:
-      - db:/data/db
+      - ./data-db:/data/db
   api:
     depends_on:
       - mongodb
