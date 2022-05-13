@@ -48,7 +48,7 @@ const verifyTokenMW = {
         {
           parent, args, context, info,
         },
-        { max: 5, window: '10s' },
+        { max: 30, window: '1m' },
       );
       if (errorMessage) { throw new RateLimitExceedError('You exceeded 30 requests per minute limit!'); }
       const res = await resolve(parent, args, context, info);
