@@ -1,6 +1,7 @@
 import axios from 'axios';
 import bcryptjs from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { createRateLimitRule } from 'graphql-rate-limit';
 import User from '../../database/models/user';
 import { UnAuthorized, ValidationError } from '../../exceptions/error';
 
@@ -8,6 +9,8 @@ const API_ENDPOINTS = {
   COUNTRIES: 'https://restcountries.com/v3.1/name/',
   EXCHANGE_API: 'https://api.apilayer.com/fixer/latest?base=SEK',
 };
+
+const pattern = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
 
 const resolvers = {
   Query: {
@@ -58,15 +61,28 @@ const resolvers = {
   },
 
   Mutation: {
-    createUser: async (parent, { user: { email, password } }) => {
+    createUser: async (parent, args, context, info) => {
+      const { user: { email, password } } = args;
+      // const errorMessage = await rateLimiter(
+      //   {
+      //     parent, args, context, info,
+      //   },
+      //   { max: 5, window: '10s' },
+      // );
+      // console.log(errorMessage);
+      // if (errorMessage) throw new Error('here');
+
       if (!email || !password) {
         throw new ValidationError('email and password required');
       }
 
-      // TODO : use regex to verify email
-      // TODO: fetch secret string from env
+      if (!email.match(pattern)) {
+        throw new ValidationError('email is not valid');
+      }
 
       const user = await User.findOne({ email });
+
+      const { SECRET } = process.env;
 
       if (user) {
         const passMatch = await bcryptjs.compare(password, user.password);
@@ -75,7 +91,7 @@ const resolvers = {
             email: user.email,
           };
 
-          const token = await jwt.sign(payLoad, 'some-secret', { expiresIn: 3600 });
+          const token = await jwt.sign(payLoad, SECRET, { expiresIn: 3600 });
           return {
             data: `Bearer ${token}`,
           };

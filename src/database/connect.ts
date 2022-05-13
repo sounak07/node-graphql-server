@@ -2,12 +2,20 @@ import mongoose from 'mongoose';
 import { DbConnectionError } from '../exceptions/error';
 
 const connectDB = async () => {
+  const {
+    DB_USER,
+    DB_PASSWORD,
+    DB_HOST,
+    DB_PORT,
+    DB_NAME,
+  } = process.env;
+
   try {
-    await mongoose.connect('mongodb+srv://sounak08:Sounak08*@cluster0-qldch.mongodb.net/anyfin?retryWrites=true&w=majority');
+    await mongoose.connect(`mongodb://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}?authSource=admin`);
 
     console.log('Mongo Connected...');
   } catch (err) {
-    throw new DbConnectionError('Db connect failed');
+    throw new DbConnectionError(`Db connect failed: ${err}`);
   }
 };
 

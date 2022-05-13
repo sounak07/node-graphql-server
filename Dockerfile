@@ -1,8 +1,8 @@
 FROM node:15.10.0
 
-WORKDIR -p /home/src/app
+WORKDIR /app
 
-COPY package*.json ./
+COPY package*.json .
 
 RUN npm install
 
@@ -10,6 +10,6 @@ COPY . .
 
 RUN npm run build
 
-EXPOSE 5070
+EXPOSE 8080
 
 CMD [ "node", "build/index.js" ]

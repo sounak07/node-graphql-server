@@ -1,22 +1,31 @@
-version: "2.3"
-
+version: "3.8"
 services:
-  api:
-    command: ["npm", "start"]
+  mongodb:
+    image: mongo:5.0.2
+    restart: on-failure
     environment:
-      DB_HOST: host.docker.internal
-      DB_DATABASE: sounak_db
-      DB_USER: postgres
-      DB_PASSWORD: postgres123
-      DB_CHARSET: utf8mb4
-      DB_SCHEMA: sounak_new
-      PORT: 8090
-    build:
-      context: .
-      dockerfile: ./Dockerfile
+      - MONGO_INITDB_ROOT_USERNAME=sounak08
+      - MONGO_INITDB_ROOT_PASSWORD=sounak0077
     ports:
-      - "8090:5070"
-    restart: always
+      - "${PORT-27017:27017}"
     volumes:
-      - ./src:/src
-      - ./build:/build
+      - db:/data/db
+  api:
+    depends_on:
+      - mongodb
+    build: .
+    restart: on-failure
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_HOST=mongodb
+      - DB_USER=sounak08
+      - DB_PASSWORD=sounak0077
+      - DB_NAME=anyfin
+      - DB_PORT=27017
+      - SECRET=superSecret
+      - PORT=8080
+    stdin_open: true
+    tty: true
+volumes:
+  db:
