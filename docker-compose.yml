@@ -27,5 +27,6 @@ services:
       - PORT=8080
       - COUNTRIES_API=https://restcountries.com/v3.1/name/
       - EXCHANGE_API=https://api.apilayer.com/fixer/latest?base=SEK
+      - EXCHANGE_API_KEY=GUJCGFRVSnpcd1PIdoPBbshSTWzjjoVk
     stdin_open: true
     tty: true

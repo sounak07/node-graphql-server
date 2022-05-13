@@ -8,6 +8,7 @@ import { UnAuthorized, ValidationError } from '../../exceptions/error';
 const {
   COUNTRIES_API,
   EXCHANGE_API,
+  EXCHANGE_API_KEY,
 } = process.env;
 
 const pattern = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
@@ -33,7 +34,7 @@ const resolvers: IResolvers = {
       );
     },
     getCurrencyValues: async (parent, { sekValue, Countries }) => {
-      const res = await axios.get(`${EXCHANGE_API}`, { headers: { apikey: 'GUJCGFRVSnpcd1PIdoPBbshSTWzjjoVk' } });
+      const res = await axios.get(`${EXCHANGE_API}`, { headers: { apikey: EXCHANGE_API_KEY } });
       let currencyList: String[];
       if (res.data && res.data.rates) {
         currencyList = Object.keys(res.data.rates);
