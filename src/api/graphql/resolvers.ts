@@ -1,23 +1,23 @@
 import axios from 'axios';
+import { IResolvers } from '@graphql-tools/utils';
 import bcryptjs from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { createRateLimitRule } from 'graphql-rate-limit';
 import User from '../../database/models/user';
 import { UnAuthorized, ValidationError } from '../../exceptions/error';
 
-const API_ENDPOINTS = {
-  COUNTRIES: 'https://restcountries.com/v3.1/name/',
-  EXCHANGE_API: 'https://api.apilayer.com/fixer/latest?base=SEK',
-};
+const {
+  COUNTRIES_API,
+  EXCHANGE_API,
+} = process.env;
 
 const pattern = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
 
-const resolvers = {
+const resolvers: IResolvers = {
   Query: {
     hello: () => 'Hello',
     getCountries: async (parent, { queryName }) => {
       const countries = await axios.get(
-        `${API_ENDPOINTS.COUNTRIES}${queryName}`,
+        `${COUNTRIES_API}${queryName}`,
       );
 
       return countries.data.map(
@@ -33,8 +33,8 @@ const resolvers = {
       );
     },
     getCurrencyValues: async (parent, { sekValue, Countries }) => {
-      const res = await axios.get(API_ENDPOINTS.EXCHANGE_API, { headers: { apikey: 'GUJCGFRVSnpcd1PIdoPBbshSTWzjjoVk' } });
-      let currencyList = [];
+      const res = await axios.get(`${EXCHANGE_API}`, { headers: { apikey: 'GUJCGFRVSnpcd1PIdoPBbshSTWzjjoVk' } });
+      let currencyList: String[];
       if (res.data && res.data.rates) {
         currencyList = Object.keys(res.data.rates);
       }
@@ -61,17 +61,7 @@ const resolvers = {
   },
 
   Mutation: {
-    createUser: async (parent, args, context, info) => {
-      const { user: { email, password } } = args;
-      // const errorMessage = await rateLimiter(
-      //   {
-      //     parent, args, context, info,
-      //   },
-      //   { max: 5, window: '10s' },
-      // );
-      // console.log(errorMessage);
-      // if (errorMessage) throw new Error('here');
-
+    createUser: async (parent, { user: { email, password } }) => {
       if (!email || !password) {
         throw new ValidationError('email and password required');
       }
@@ -91,7 +81,7 @@ const resolvers = {
             email: user.email,
           };
 
-          const token = await jwt.sign(payLoad, SECRET, { expiresIn: 3600 });
+          const token = await jwt.sign(payLoad, String(SECRET), { expiresIn: 3600 });
           return {
             data: `Bearer ${token}`,
           };

@@ -25,6 +25,8 @@ services:
       - DB_PORT=27017
       - SECRET=superSecret
       - PORT=8080
+      - COUNTRIES_API=https://restcountries.com/v3.1/name/
+      - EXCHANGE_API=https://api.apilayer.com/fixer/latest?base=SEK
     stdin_open: true
     tty: true
 volumes:

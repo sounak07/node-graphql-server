@@ -35,3 +35,10 @@ export class DbConnectionError extends BaseError {
     Object.setPrototypeOf(this, DbConnectionError.prototype);
   }
 }
+
+export class RateLimitExceedError extends BaseError {
+  constructor(message: string) {
+    super(message);
+    Object.setPrototypeOf(this, RateLimitExceedError.prototype);
+  }
+}

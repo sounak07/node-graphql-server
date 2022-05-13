@@ -1,10 +1,9 @@
 /* eslint-disable consistent-return */
 import jwt from 'jsonwebtoken';
-import rateLimit from 'express-rate-limit';
-import { createRateLimitRule } from 'graphql-rate-limit';
-import { UnAuthorized } from '../../exceptions/error';
+import { getGraphQLRateLimiter } from 'graphql-rate-limit';
+import { RateLimitExceedError, UnAuthorized } from '../../exceptions/error';
 
-const rateLimiter = createRateLimitRule({ identifyContext: (ctx) => ctx.id });
+const rateLimiter = getGraphQLRateLimiter({ identifyContext: (ctx) => ctx.id });
 
 const verifyTokenMW = {
   Query: {
@@ -45,7 +44,13 @@ const verifyTokenMW = {
   },
   Mutation: {
     createUser: async (resolve, parent, args, context, info) => {
-      rateLimiter({ window: '1s', max: 5 });
+      const errorMessage = await rateLimiter(
+        {
+          parent, args, context, info,
+        },
+        { max: 5, window: '10s' },
+      );
+      if (errorMessage) { throw new RateLimitExceedError('You exceeded 30 requests per minute limit!'); }
       const res = await resolve(parent, args, context, info);
       return res;
     },
