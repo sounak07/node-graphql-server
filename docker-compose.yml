@@ -29,5 +29,3 @@ services:
       - EXCHANGE_API=https://api.apilayer.com/fixer/latest?base=SEK
     stdin_open: true
     tty: true
-volumes:
-  db:
